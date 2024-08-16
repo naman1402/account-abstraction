@@ -54,7 +54,7 @@ contract MinimalAccount is IAccount, Ownable {
         _payPrefund(missingAccountFunds);
     }
 
-    function execute(address dest, uint256 value, bytes calldata functionData) external fromEntryPoint {
+    function execute(address dest, uint256 value, bytes calldata functionData) external fromEntryPointOrOwner {
         (bool success, bytes memory result) = dest.call{value: value}(functionData);
         if (!success) {
             revert MinimalAccount__CallFailed(result);

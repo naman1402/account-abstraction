@@ -8,7 +8,7 @@ import {Config} from "./Config.s.sol";
 contract DeployMinimal is Script {
     function run() public {}
 
-    function deployMinimalAccount() public returns (Config, MinimalAccount){
+    function deployMinimalAccount() public returns (Config, MinimalAccount) {
         Config helperConfig = new Config();
         Config.NetworkConfig memory config = helperConfig.getConfig();
 
