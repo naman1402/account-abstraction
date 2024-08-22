@@ -11,9 +11,10 @@ contract Config is Script {
     struct NetworkConfig {
         address entryPoint;
         address account;
+        address usdc;
     }
 
-    uint256 constant POLYGON_MUMBAI_CHAIN_ID = 80002;
+    uint256 constant POLYGON_AMOY_CHAIN_ID = 80002;
     uint256 constant ZK_SYNC_SEPOLIA_CHAIN_ID = 300;
     uint256 constant LOCAL_CHAIN_ID = 31337;
     address constant WALLET_ADDRESS = 0xc232baceb4f642b5acc96529c7Af7dE73d638C28;
@@ -23,16 +24,16 @@ contract Config is Script {
     mapping(uint256 chainId => NetworkConfig) public networkConfigs;
 
     constructor() {
-        networkConfigs[POLYGON_MUMBAI_CHAIN_ID] = getPolygonMumbaiConfig();
+        networkConfigs[POLYGON_AMOY_CHAIN_ID] = getPolygonAmoyConfig();
         networkConfigs[ZK_SYNC_SEPOLIA_CHAIN_ID] = getZKSyncConfig();
     }
 
-    function getPolygonMumbaiConfig() public pure returns (NetworkConfig memory) {
-        return NetworkConfig({entryPoint: 0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789, account: WALLET_ADDRESS});
+    function getPolygonAmoyConfig() public pure returns (NetworkConfig memory) {
+        return NetworkConfig({entryPoint: 0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789, account: WALLET_ADDRESS, usdc: 0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582});
     }
 
     function getZKSyncConfig() public pure returns (NetworkConfig memory) {
-        return NetworkConfig({entryPoint: address(0), account: WALLET_ADDRESS});
+        return NetworkConfig({entryPoint: address(0), account: WALLET_ADDRESS, usdc: 0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4});
     }
 
     function getOrCreateEthConfig() public returns (NetworkConfig memory) {
@@ -45,11 +46,11 @@ contract Config is Script {
         console2.log("deploying mocks...");
         vm.startBroadcast(ANVIL_DEFAULT_ACCOUNT);
         EntryPoint entryPoint = new EntryPoint();
-        // ERC20Mock erc20mock = new ERC20Mock();
+        ERC20Mock erc20mock = new ERC20Mock();
         vm.stopBroadcast();
         console2.log("mocks deployed!");
 
-        localNetworkConfig = NetworkConfig({entryPoint: address(entryPoint), account: ANVIL_DEFAULT_ACCOUNT});
+        localNetworkConfig = NetworkConfig({entryPoint: address(entryPoint), account: ANVIL_DEFAULT_ACCOUNT, usdc: address(erc20mock)});
         return localNetworkConfig;
     }
 
