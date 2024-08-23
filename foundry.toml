@@ -2,10 +2,27 @@
 src = "src"
 out = "out"
 libs = ["lib"]
-remappings = ['@openzeppelin/contracts=lib/openzeppelin-contracts/contracts']
-fs_permissions = [
-    { access = "read", path = "./broadcast" },
-    { access = "read", path = "./reports" },
+remappings = [
+    "@openzeppelin/contracts-upgradeable/=lib/foundry-era-contracts/lib/openzeppelin-contracts-upgradeable/contracts/",
+    "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+    "account-abstraction/=lib/account-abstraction/contracts/",
+    "ds-test/=lib/openzeppelin-contracts/lib/forge-std/lib/ds-test/src/",
+    "erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
+    "forge-std/=lib/forge-std/src/",
+    "foundry-devops/=lib/foundry-devops/",
+    "foundry-era-contracts/=lib/foundry-era-contracts/",
+    "murky/=lib/foundry-era-contracts/lib/murky/src/",
+    "openzeppelin-contracts-upgradeable/=lib/foundry-era-contracts/lib/openzeppelin-contracts-upgradeable/",
+    "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+    "solpp/=lib/foundry-era-contracts/src/solpp/solpp-generated-contracts/",
 ]
 
-# See more config options https://github.com/foundry-rs/foundry/tree/master/config
+[profile.zksync]
+src = 'src'
+libs = ['lib']
+fallback_oz = true
+is_system = false
+mode = "3"
+
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+
