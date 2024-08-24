@@ -89,6 +89,15 @@ contract ZkMinimalAccount is IAccount, Ownable {
         payable
     {}
 
+    /**
+     * Transaction is struct that contains details like nonce, signature and other data
+     * function systemCallWithPropagatedRevert(uint32 gasLimit, address to, uint128 value, bytes memory data) internal returns (bytes memory returnData)
+     * totalRequiredBalance is the balance required for transaction, if account contract (address(this)) does not have totalRequiredBalance then revert with custom error
+     * txhash is hash of transaction data signed by EOA, signer is recovered address from transaction hash and provided signature
+     * signer = address that signed a hashed message (`txHash`) with `_transaction.signature`
+     * if signer matches MinimalAccount owner then return ACCOUNT_VALIDATION_SUCCESS_MAGIC as magic, or else return 0 indicating failure validation
+     * 
+    */
     function _validateTransaction(Transaction memory _transaction) internal returns (bytes4 magic) {
         SystemContractsCaller.systemCallWithPropagatedRevert(uint32(gasleft()), address(NONCE_HOLDER_SYSTEM_CONTRACT), 0, abi.encodeCall(INonceHolder.incrementMinNonceIfEquals, (_transaction.nonce)));
         uint256 totalRequiredBalance = _transaction.totalRequiredBalance();
@@ -108,6 +117,13 @@ contract ZkMinimalAccount is IAccount, Ownable {
         return magic;
     }
 
+    /**
+     * `to` is the destination address, using safecast to convert value into uint128, data is the transaction data
+     * if the destination is system contract, calculate remaining gas and cast into uint32, and calls system contract using `SystemContractCaller`
+     * if it is a general contract interaction, then we will use inline assembly for fine-grailed control over ether transaction, and check success of call
+     * if call fails then revert using custom error
+     * 
+    */
     function _executeTransaction(Transaction memory _transaction) internal {
         address to = address(uint160(_transaction.to));
         uint128 value = Utils.safeCastToU128(_transaction.value);
