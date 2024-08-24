@@ -2,6 +2,9 @@
 It allows accounts to define custom authorization mechanisms, mutli-sig wallet, smart contract-based wallet.
 It give the ability to create custom account types that can control how transactions are processed, validated, and executed, rather than relying solely on the traditional externally owned accounts (EOAs) or standard smart contracts.
 
+### Note:
+> this project is INCOMPLETE as it was meant for learning purposes only, learning resource: https://updraft.cyfrin.io/courses/advanced-foundry/account-abstraction/
+
 ### In EVM: 
 IAccount: core functionality the defines core functionality that a custom account implement, validating and executing transactions. has `validateUserOp` and `executeUserOp`
 
@@ -31,8 +34,8 @@ forge build
 forge compile
 ```
 
-
 #### References
 https://medium.com/infinitism/erc-4337-account-abstraction-without-ethereum-protocol-changes-d75c9d94dc4a
 
 https://eips.ethereum.org/EIPS/eip-4337
+
